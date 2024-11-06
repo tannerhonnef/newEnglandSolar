@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Solar Panels in Southeast New England</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.30/"></script>
+
+    <script>
+      require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/widgets/LayerList"], (Map, MapView, FeatureLayer, Legend, LayerList) => {
+        const map = new Map({
+          basemap: "topo-vector"
+        });
+
+        const view = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom: 10,
+          center: [-71.39, 41.83]
+        });
+
+        const colors = ["#FFDDC1", "#FFC4A3", "#FFA384", "#FF8B66", "#FF7366", "#FFAB4C", "#FFD23F", "#B5E877", "#7CD4E6", "#6BAAE6", "#8F85E6", "#B0B0B0"];
+
+        const commonProperties = {
+          type: "simple-fill",
+          outline:{
+            width: 0
+          }
+        };
+
+        const y2012 = {
+          ...commonProperties,
+          color: colors[1]
+        };
+
+        const y2013 = {
+          ...commonProperties,
+          color: colors[2]
+        };
+
+        const y2014 = {
+          ...commonProperties,
+          color: colors[3]
+        };
+
+        const y2015 = {
+          ...commonProperties,
+          color: colors[4]
+        };
+
+        const y2016 = {
+          ...commonProperties,
+          color: colors[5]
+        };
+
+        const y2017 = {
+          ...commonProperties,
+          color: colors[6]
+        };
+
+        const y2018 = {
+          ...commonProperties,
+          color: colors[7]
+        };
+
+        const y2019 = {
+          ...commonProperties,
+          color: colors[8]
+        };
+
+        const y2020 = {
+          ...commonProperties,
+          color: colors[9]
+        };
+        const y2021 = {
+          ...commonProperties,
+          color: colors[10]
+        };
+
+        const y2011 = {
+          ...commonProperties,
+          color: colors[0]
+        };
+
+        const otheryr = {
+          ...commonProperties,
+          color: colors[11]
+        };
+
+
+        const yrRenderer = {
+          type: "unique-value",
+          legendOptions: {
+            title: "Built Year"
+          },
+          defaultSymbol: otheryr,
+          defaultLabel: "Other Year",
+          field: "year",
+
+          uniqueValueInfos: [
+            {
+              value: "2011",
+              symbol: y2011,
+              label: "2011"
+            },
+            {
+              value: "2012",
+              symbol: y2012,
+              label: "2012"
+            },
+            {
+              value: "2013",
+              symbol: y2013,
+              label: "2013"
+            },
+            {
+              value: "2014",
+              symbol: y2014,
+              label: "2014"
+            },
+            {
+              value: "2015",
+              symbol: y2015,
+              label: "2015"
+            },
+            {
+              value: "2016",
+              symbol: y2016,
+              label: "2016"
+            },
+            {
+              value: "2017",
+              symbol: y2017,
+              label: "2017"
+            },
+            {
+              value: "2018",
+              symbol: y2018,
+              label: "2018"
+            },
+            {
+              value: "2019",
+              symbol: y2019,
+              label: "2019"
+            },
+            {
+              value: "2020",
+              symbol: y2020,
+              label: "2020"
+            },
+            {
+              value: "2021",
+              symbol: y2021,
+              label: "2021"
+            }
+          ]
+
+        };
+
+        const template = {
+          title: "Solar Panel",
+          content: 
+          [{
+              type: "fields",
+              fieldInfos: [
+                {
+                  fieldName: "date_built",
+                  label: "Date of Built"
+                },
+                {
+                  fieldName: "solar_area",
+                  label: "Area of Solar"
+                }
+              ]
+              },
+              {
+                type: "media",
+                title: "Landcover Classes Surrounding Solar",
+                mediaInfos: [
+                  {
+                    type: "column-chart",
+                    value: {
+                      fields: ["forest", "wetland", "developed", "water", "grassland", "unknown", "agricultur", "snow", "barren"],
+                      colors: ["#006400", "#4682B4", "#808080", "#0000FF", "#7CFC00", "#D3D3D3", "#FFD700", "#FFFFFF", "#8B4513"],
+                    }
+                  },
+                ]
+              }
+            
+            ]};
+
+        const baseLayer = new FeatureLayer({
+          portalItem: {
+            id: "a171604da3dc42b0befc156d8b23b9d5"
+          },
+
+          popupTemplate: template,
+          renderer: yrRenderer,
+        });
+
+        view.when(() => {
+          const layerList = new LayerList({
+            view: view
+          });
+          const legend = new Legend({
+            view: view,
+            layerInfos: [
+              {
+                layer: baseLayer,
+                title: "Solar Panels"
+              }
+            ]
+          });
+          view.ui.add(legend, "bottom-right");
+          view.ui.add(layerList, "top-right")
+        });
+        
+
+          map.add(baseLayer)
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
